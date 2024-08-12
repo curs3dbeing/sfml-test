@@ -21,6 +21,7 @@ public:
 	virtual std::string getName();
 	virtual void setWeapon(Weapon _weapon);
 	virtual Weapon getWeapon();
+	virtual sf::Sprite& getSprite();
 
 };
 

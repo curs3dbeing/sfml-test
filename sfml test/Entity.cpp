@@ -26,3 +26,7 @@ void Entity::setWeapon(Weapon _weapon) {
 Weapon Entity::getWeapon() {
 	return this->weapon;
 }		
+
+sf::Sprite& Entity::getSprite() {
+	return this->sprite;
+}

@@ -6,7 +6,7 @@
 
 using namespace sf;
 
-void Movement(RectangleShape& rect, RectangleShape& vision_box);
+void Movement(Sprite& rect, RectangleShape& vision_box);
 RenderWindow window(VideoMode(1000, 1000), "My Game");
 Vector2f window_size = static_cast<sf::Vector2f>(window.getSize()); // window size
 
@@ -14,7 +14,7 @@ Vector2f window_size = static_cast<sf::Vector2f>(window.getSize()); // window si
 int main()
 {
 	Character player; // player
-	std::string path = "C://Users//USER//Desktop//TPPO//sfml test//imagez//block.jpg";
+	std::string path = "hero.png";	
 	player.setTexture(path);
 	player.setSprite();
 	RectangleShape vision_box(Vector2f(400.f, 200.f)); // vision box - box for camera movement 
@@ -45,9 +45,9 @@ int main()
 			}
 		}
 			window.clear();
-			Movement(player.getHitbox(),vision_box);
 			window.draw(vision_box);
-			window.draw(player.getHitbox());
+			window.draw(player.getSprite());
+			Movement(player.getSprite(), vision_box);
 			// Render
 			window.display();
 
@@ -56,7 +56,7 @@ int main()
 
 
 //vision_box is not used for now
-void Movement(RectangleShape& rect, RectangleShape& vision_box) {
+void Movement(Sprite& rect, RectangleShape& vision_box) {
 	if (Keyboard::isKeyPressed(Keyboard::W) && Keyboard::isKeyPressed(Keyboard::D)) {
 		rect.move(5.f, -5.f);
 		return;

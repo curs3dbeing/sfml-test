@@ -6,9 +6,7 @@
 extern sf::Vector2f window_size;
 
 Character::Character() {
-	this->hitbox = sf::RectangleShape(sf::Vector2f(100.f, 100.f));
-	this->hitbox.move(window_size.x / 2 - 50.f, window_size.y / 2 - 50.f);
-	this->hitbox.setFillColor(sf::Color::Red);
+	this->sprite.move(window_size.x / 2 - 50.f, window_size.y / 2 - 50.f);
 }
 
 Character::Character(float _HP, std::string _Name, std::string img_path, float speed) : Entity(_HP, _Name, img_path) {
@@ -35,6 +33,6 @@ void Character::setSprite() {
 	this->sprite.setTexture(this->getTexture());
 }
 
-sf::Texture Character::getTexture() {
+sf::Texture& Character::getTexture() {
 	return this->texture;
 }

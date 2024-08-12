@@ -14,7 +14,7 @@ public:
 	sf::RectangleShape& getHitbox();
 	void setTexture(std::string path);
 	void setSprite();
-	sf::Texture getTexture();
+	sf::Texture& getTexture();
 private:
 	float speed;
 	sf::RectangleShape hitbox;
