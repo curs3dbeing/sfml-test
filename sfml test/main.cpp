@@ -2,17 +2,21 @@
 #include "SFML\Window.hpp"
 #include "SFML\System.hpp"
 #include <iostream>
+#include "Character.h"
 
 using namespace sf;
 
-void Update(RectangleShape& rect, RectangleShape& vision_box);
+void Movement(RectangleShape& rect, RectangleShape& vision_box);
+RenderWindow window(VideoMode(1000, 1000), "My Game");
+Vector2f window_size = static_cast<sf::Vector2f>(window.getSize()); // window size
+
 
 int main()
 {
-	RenderWindow window(VideoMode(1000, 900), "My Game");
-	Vector2f window_size = static_cast<sf::Vector2f>(window.getSize()); // window size
-
-	RectangleShape rect(Vector2f(100.f,100.f)); // rect - player model
+	Character player; // player
+	std::string path = "C://Users//USER//Desktop//TPPO//sfml test//imagez//block.jpg";
+	player.setTexture(path);
+	player.setSprite();
 	RectangleShape vision_box(Vector2f(400.f, 200.f)); // vision box - box for camera movement 
 
 	// vision box atributes for modeling the camera movement and etc.
@@ -20,11 +24,9 @@ int main()
 	vision_box.setOutlineColor(Color::White);
 	vision_box.setFillColor(Color::Black);
 
-	window.setFramerateLimit(60); //FPS border(just in case)
+	window.setFramerateLimit(120); //FPS border(just in case)
 
 	vision_box.move(window_size.x / 2 - 200.f, window_size.y / 2 - 100.f);
-	rect.move(window_size.x / 2 - 50.f, window_size.y/2 - 50.f);
-	rect.setFillColor(Color::Red);
 
 	Event ev;
 	while (window.isOpen()) {
@@ -40,32 +42,21 @@ int main()
 			case Event::Closed:
 				window.close();
 				break;
-
-			case Event::MouseButtonPressed:
-				if (ev.key.code == Mouse::Left) {
-					rect.setFillColor(Color::Green);
-					break;
-				}
-				if (ev.key.code == Mouse::Right) {
-					rect.setFillColor(Color::Red);
-					break;
-				}
 			}
 		}
-		window.clear();
-		Update(rect, vision_box);
-		window.draw(vision_box);
-		window.draw(rect);
-		// Render
-		window.display();
+			window.clear();
+			Movement(player.getHitbox(),vision_box);
+			window.draw(vision_box);
+			window.draw(player.getHitbox());
+			// Render
+			window.display();
 
 	}
-
 }
 
 
-// vision box is not used for now
-void Update(RectangleShape& rect, RectangleShape& vision_box) {
+//vision_box is not used for now
+void Movement(RectangleShape& rect, RectangleShape& vision_box) {
 	if (Keyboard::isKeyPressed(Keyboard::W) && Keyboard::isKeyPressed(Keyboard::D)) {
 		rect.move(5.f, -5.f);
 		return;
