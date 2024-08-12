@@ -13,6 +13,7 @@ protected:
 	bool visible;
 	bool passable;
 public:
+	Block();
 	Block(sf::RectangleShape,std::string,bool,bool);
 	virtual bool isVisible();
 	virtual bool isPassable();
