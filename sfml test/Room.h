@@ -2,8 +2,9 @@
 #define ROOM_HPP
 #include "SFML/Graphics.hpp"
 #include "Block.h"
+#include "vector"
+#include "string"
 
-const int n=5;
 class Room
 {
 private:
@@ -14,7 +15,8 @@ private:
 public:
 	Room(int n, int k);
 	~Room();
-	void roomDraw();
+	void roomDraw(sf::RenderWindow& window);
+	void setBlocks(sf::Texture&);
 };
 
 #endif

@@ -2,11 +2,11 @@
 #include "Entity.h"
 #include "SFML/Graphics.hpp"
 #include <string>
+#include <iostream>
 
 extern sf::Vector2f window_size;
 
 Character::Character() {
-	this->sprite.move(window_size.x / 2 - 50.f, window_size.y / 2 - 50.f);
 }
 
 Character::Character(float _HP, std::string _Name, std::string img_path, float speed) : Entity(_HP, _Name, img_path) {

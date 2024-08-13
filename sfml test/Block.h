@@ -14,7 +14,12 @@ protected:
 	bool passable;
 public:
 	Block();
-	Block(sf::RectangleShape,std::string,bool,bool);
+	Block(std::string,bool,bool);
+	sf::Sprite& getSprite();
+	void setTexture(sf::Texture&);
+	sf::Texture& getTexture();
+	void setVisible(bool);
+	void setPassable(bool);
 	virtual bool isVisible();
 	virtual bool isPassable();
 };

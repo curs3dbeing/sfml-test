@@ -3,22 +3,36 @@
 #include "SFML\System.hpp"
 #include <iostream>
 #include "Character.h"
+#include "Room.h"
 
 using namespace sf;
 
 void Movement(Sprite& rect, RectangleShape& vision_box);
-RenderWindow window(VideoMode(1000, 1000), "My Game");
+RenderWindow window(VideoMode(1600, 900), "My Game", sf::Style::Default);
 Vector2f window_size = static_cast<sf::Vector2f>(window.getSize()); // window size
 
 
 int main()
 {
-	Character player; // player
+	//room
+	Room mainroom(9,16);
+	sf::Texture blocktexture;
+	std::string floorpath = "C:/Users/USER/Desktop/TPPO/sfml test/imagez/block_floor.png";
+	blocktexture.loadFromFile(floorpath);
+	mainroom.setBlocks(blocktexture);
+
+	
+
+	// player
+	Character player; 
 	std::string path = "hero.png";	
 	player.setTexture(path);
 	player.setSprite();
-	RectangleShape vision_box(Vector2f(400.f, 200.f)); // vision box - box for camera movement 
+	player.getSprite().move(window_size.x / 2 - player.getTexture().getSize().x/2, window_size.y / 2 - player.getTexture().getSize().y/2);
 
+
+
+	RectangleShape vision_box(Vector2f(700.f, 400.f)); // vision box - box for camera movement 
 	// vision box atributes for modeling the camera movement and etc.
 	vision_box.setOutlineThickness(3.f);
 	vision_box.setOutlineColor(Color::White);
@@ -26,11 +40,9 @@ int main()
 
 	window.setFramerateLimit(120); //FPS border(just in case)
 
-	vision_box.move(window_size.x / 2 - 200.f, window_size.y / 2 - 100.f);
-
+	vision_box.move(window_size.x / 2 - vision_box.getSize().x/2, window_size.y / 2 - vision_box.getSize().y / 2);
 	Event ev;
 	while (window.isOpen()) {
-
 		while (window.pollEvent(ev)) {
 
 			switch (ev.type) {
@@ -45,10 +57,12 @@ int main()
 			}
 		}
 			window.clear();
+			mainroom.roomDraw(window);
 			window.draw(vision_box);
 			window.draw(player.getSprite());
+
 			Movement(player.getSprite(), vision_box);
-			// Render
+
 			window.display();
 
 	}
@@ -74,19 +88,19 @@ void Movement(Sprite& rect, RectangleShape& vision_box) {
 		return;
 	}
 	if (Keyboard::isKeyPressed(Keyboard::W)) {
-		rect.move(0.f, -8.f);
+		rect.move(0.f, -7.07f);
 		return;
 	}
 	if (Keyboard::isKeyPressed(Keyboard::A)) {
-		rect.move(-8.f, 0.f);
+		rect.move(-7.07f, 0.f);
 		return;
 	}
 	if (Keyboard::isKeyPressed(Keyboard::S)) {
-		rect.move(0.f, 8.f);
+		rect.move(0.f, 7.07f);
 		return;
 	}
 	if (Keyboard::isKeyPressed(Keyboard::D)) {
-		rect.move(8.f, 0.f);
+		rect.move(7.07f, 0.f);
 		return;
 	}
 }
