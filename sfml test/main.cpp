@@ -17,7 +17,7 @@ int main()
 	//room
 	Room mainroom(9,16);
 	sf::Texture blocktexture;
-	std::string floorpath = "D:/my_projects/graphics/serega_sfml/imagez/block_floor.png";
+	std::string floorpath = "imagez/block_floor.png";
 	blocktexture.loadFromFile(floorpath);
 	mainroom.setBlocks(blocktexture);
 
@@ -25,7 +25,7 @@ int main()
 
 	// player
 	Character player; 
-	std::string path = "hero.png";	
+	std::string path = "imagez/hero.png";	
 	player.setTexture(path);
 	player.setSprite();
 	player.getSprite().move(window_size.x / 2 - player.getTexture().getSize().x/2, window_size.y / 2 - player.getTexture().getSize().y/2);
@@ -37,6 +37,7 @@ int main()
 	vision_box.setOutlineThickness(3.f);
 	vision_box.setOutlineColor(Color::White);
 	vision_box.setFillColor(Color::Black);
+	vision_box.setFillColor(Color::Transparent);
 
 	window.setFramerateLimit(120); //FPS border(just in case)
 

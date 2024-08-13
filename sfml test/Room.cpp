@@ -35,7 +35,7 @@ void Room::setBlocks(sf::Texture& texture) {
 	for (int i = 0; i < y_size; i++) {
 		for (int j = 0; j < x_size; j++) {
 			this->room_size[i][j].setTexture(texture);
-			this->room_size[i][j].setPosition(sf::Vector2f(100.f * i, 100.f * j));
+			this->room_size[i][j].setPosition(sf::Vector2f(100.f * j, 100.f * i));
 		}
 	}
 }
