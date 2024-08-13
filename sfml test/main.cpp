@@ -2,6 +2,7 @@
 #include "SFML\Window.hpp"
 #include "SFML\System.hpp"
 #include <iostream>
+#include <random>
 #include "Character.h"
 
 using namespace sf;
@@ -9,6 +10,13 @@ using namespace sf;
 void Movement(Sprite& rect, RectangleShape& vision_box);
 RenderWindow window(VideoMode(1000, 1000), "My Game");
 Vector2f window_size = static_cast<sf::Vector2f>(window.getSize()); // window size
+
+
+void worldGen(float seed) {
+	std::random_device rd;
+	std::mt19937 gen(seed);
+
+}
 
 
 int main()
