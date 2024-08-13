@@ -36,6 +36,10 @@ void Block::setTexture(sf::Texture& texture) {
 	this->sprite.setTexture(this->texture);
 }
 
+void Block::setPosition(sf::Vector2f pos) {
+	this->sprite.setPosition(pos);
+}
+
 sf::Texture& Block::getTexture() {
 	return this->texture;
 }

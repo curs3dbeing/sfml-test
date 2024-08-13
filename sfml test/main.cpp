@@ -17,7 +17,7 @@ int main()
 	//room
 	Room mainroom(9,16);
 	sf::Texture blocktexture;
-	std::string floorpath = "C:/Users/USER/Desktop/TPPO/sfml test/imagez/block_floor.png";
+	std::string floorpath = "D:/my_projects/graphics/serega_sfml/imagez/block_floor.png";
 	blocktexture.loadFromFile(floorpath);
 	mainroom.setBlocks(blocktexture);
 

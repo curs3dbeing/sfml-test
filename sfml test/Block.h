@@ -20,6 +20,7 @@ public:
 	sf::Texture& getTexture();
 	void setVisible(bool);
 	void setPassable(bool);
+	void setPosition(sf::Vector2f pos);
 	virtual bool isVisible();
 	virtual bool isPassable();
 };
