@@ -4,20 +4,25 @@
 #include <iostream>
 #include "Character.h"
 #include "Room.h"
+#include <vector>
 
 using namespace sf;
 
 void Movement(Sprite& rect, RectangleShape& vision_box);
-RenderWindow window(VideoMode(1600, 900), "My Game", sf::Style::Default);
+RenderWindow window(VideoMode(1920, 1080), "My Game", sf::Style::Default);
 Vector2f window_size = static_cast<sf::Vector2f>(window.getSize()); // window size
 
 
 int main()
 {
+	//blocks
+	std::vector<Block> allBlocks;
+
+
 	//room
 	Room mainroom(9,16);
 	sf::Texture blocktexture;
-	std::string floorpath = "imagez/block_floor.png";
+	std::string floorpath = "imagez/floor1.png";
 	blocktexture.loadFromFile(floorpath);
 	mainroom.setBlocks(blocktexture);
 

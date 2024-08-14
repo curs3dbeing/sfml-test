@@ -7,6 +7,7 @@
 extern sf::Vector2f window_size;
 
 Character::Character() {
+
 }
 
 Character::Character(float _HP, std::string _Name, std::string img_path, float speed) : Entity(_HP, _Name, img_path) {

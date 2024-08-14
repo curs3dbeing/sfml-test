@@ -3,9 +3,19 @@
 #include "SFML\Graphics.hpp"
 #include "string"
 
+enum block_types {
+	floor1,
+	floor2,
+	floor3,
+	wall1,
+	wall2,
+	wall3
+};
+
 class Block
 {
 protected:
+	block_types blockName;
 	std::string img_path;
 	sf::Sprite sprite;
 	sf::RectangleShape shape;
