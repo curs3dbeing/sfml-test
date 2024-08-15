@@ -1,20 +1,21 @@
 #ifndef BLOCK_HPP
 #define BLOCK_HPP
 #include "SFML\Graphics.hpp"
-#include "string"
+#include <string>
+#include <map>
+#include "Serializable.h"
 
-enum block_types {
+enum class block_types {
 	floor1,
-	floor2,
-	floor3,
-	wall1,
-	wall2,
-	wall3
+	wall1
 };
 
-class Block
+
+
+class Block : public Serializable
 {
 protected:
+
 	block_types blockName;
 	std::string img_path;
 	sf::Sprite sprite;
@@ -22,9 +23,13 @@ protected:
 	sf::Texture texture;
 	bool visible;
 	bool passable;
+
 public:
+	static std::map<block_types,Block> allBlocks;
+
 	Block();
 	Block(std::string,bool,bool);
+	Block(block_types, std::string, bool, bool);
 	sf::Sprite& getSprite();
 	void setTexture(sf::Texture&);
 	sf::Texture& getTexture();
@@ -33,6 +38,10 @@ public:
 	void setPosition(sf::Vector2f pos);
 	virtual bool isVisible();
 	virtual bool isPassable();
+	block_types& getBlockName();
+	auto serialize(std::ostream& os) const -> std::size_t;
+	auto deserialize(std::istream os) -> std::size_t;
+	auto serialized_size() const -> std::size_t;
 };
 
 #endif

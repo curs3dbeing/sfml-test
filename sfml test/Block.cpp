@@ -1,6 +1,11 @@
 #include "Block.h"
 #include "SFML/Graphics.hpp"
 #include <string>
+#include <iostream>
+#include <fstream>
+#include "Serializable.h"
+
+block_types last_in_enum = block_types::wall1;
 
 Block::Block() {
 
@@ -42,4 +47,27 @@ void Block::setPosition(sf::Vector2f pos) {
 
 sf::Texture& Block::getTexture() {
 	return this->texture;
+}
+
+block_types& Block::getBlockName() {
+	return this->blockName;
+}
+
+Block::Block(block_types blockName, std::string img_path, bool visible, bool passable) : blockName(blockName), img_path(img_path), visible(visible), passable(passable) {
+	this->texture.loadFromFile(img_path);
+	this->sprite.setTexture(texture);
+}
+
+auto Block::serialize(std::ostream& os) const -> std::size_t {
+	os.write(reinterpret_cast<char*>(this),sizeof(this));
+}
+
+auto Block::deserialize(std::istream is) -> std::size_t {
+	std::size_t size = 25;
+	return size;
+}
+
+auto Block::serialized_size() const -> std::size_t {
+	std::size_t size = 25;
+	return size;
 }

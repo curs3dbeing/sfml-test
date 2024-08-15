@@ -144,6 +144,7 @@
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Room.cpp" />
+    <ClCompile Include="Serializable.cpp" />
     <ClCompile Include="sfml test.cpp" />
     <ClCompile Include="Weapon.cpp" />
   </ItemGroup>
@@ -152,6 +153,7 @@
     <ClInclude Include="Character.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="Room.h" />
+    <ClInclude Include="Serializable.h" />
     <ClInclude Include="Weapon.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -2,11 +2,20 @@
 #include "SFML\Window.hpp"
 #include "SFML\System.hpp"
 #include <iostream>
+#include <fstream>
 #include "Character.h"
 #include "Room.h"
 #include <vector>
+#include <set>
+#include <list>
+#include <map>
+#include "Block.h"
 
 using namespace sf;
+
+std::map<block_types, Block> Block::allBlocks;
+
+void addBlock(std::vector<Block>&, Block);
 
 void Movement(Sprite& rect, RectangleShape& vision_box);
 RenderWindow window(VideoMode(1920, 1080), "My Game", sf::Style::Default);
@@ -15,9 +24,20 @@ Vector2f window_size = static_cast<sf::Vector2f>(window.getSize()); // window si
 
 int main()
 {
-	//blocks
-	std::vector<Block> allBlocks;
+	std::list<Block> blocks;
 
+	blocks.push_back(Block(static_cast<block_types>(0), "imagez/floor1.png", true, true));
+	blocks.push_back(Block(static_cast<block_types>(1), "imagez/wall1.png", true, false));
+
+	for (auto block : blocks) {
+		Block::allBlocks.insert(std::make_pair(block.getBlockName(), block));
+	}
+	
+	std::ofstream blockFile("data.dat", std::ios::binary & std::ios::app);
+
+	for (auto block : blocks) {
+		block.serialize(blockFile);
+	}
 
 	//room
 	Room mainroom(9,16);
@@ -110,3 +130,19 @@ void Movement(Sprite& rect, RectangleShape& vision_box) {
 		return;
 	}
 }
+
+void addBlock(std::vector<Block>& allBlocks, Block block) {
+	sf::Texture texture = block.getTexture();
+	bool visible = block.isVisible();
+	bool passable = block.isPassable();
+	block_types blockName = block.getBlockName();
+
+}
+
+//block_types blockName;
+//std::string img_path;
+//sf::Sprite sprite;
+//sf::RectangleShape shape;
+//sf::Texture texture;
+//bool visible;
+//bool passable;
