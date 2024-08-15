@@ -2,7 +2,11 @@
 #include "SFML\Window.hpp"
 #include "SFML\System.hpp"
 #include <iostream>
+<<<<<<< HEAD
 #include <fstream>
+=======
+#include <random>
+>>>>>>> 0e6770bb7ab086314743ba5f8813fb7cdbf76dc9
 #include "Character.h"
 #include "Room.h"
 #include <vector>
@@ -20,7 +24,6 @@ void addBlock(std::vector<Block>&, Block);
 void Movement(Sprite& rect, RectangleShape& vision_box);
 RenderWindow window(VideoMode(1920, 1080), "My Game", sf::Style::Default);
 Vector2f window_size = static_cast<sf::Vector2f>(window.getSize()); // window size
-
 
 int main()
 {
