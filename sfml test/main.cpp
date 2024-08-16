@@ -34,7 +34,7 @@ int main()
 		Block::allBlocks.insert(std::make_pair(block.getBlockName(), block));
 	}
 	
-	std::ofstream blockFile("C://Users//USER//Desktop//TPPO//sfml test//sfml test//data//data.bin", std::ios::binary & std::ios::app);
+	std::ofstream blockFile("data//data.bin", std::ios::binary & std::ios::app);
 	try {
 		if (blockFile.is_open()) {
 			for (auto block : blocks) {
@@ -49,7 +49,8 @@ int main()
 
 	//blocks.clear();
 	// BLOCK FILE READ ( I HONESTLY DONT LIKE THIS PART (REWORK REQUIRED) ) 
-	std::ifstream blocksFile("C://Users//USER//Desktop//TPPO//sfml test//sfml test//data//data.bin", std::ios::binary); 
+
+	std::ifstream blocksFile("data//data.bin", std::ios::binary); 
 	try {
 		blocks.push_back(Block());
 		std::list<Block>::iterator it = blocks.begin();
