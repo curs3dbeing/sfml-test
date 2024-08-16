@@ -7,9 +7,8 @@
 class Serializable
 {
 public:
-	virtual bool serialize(std::ostream& os) = 0;
-	virtual auto deserialize(std::istream is) -> std::size_t = 0;
-	virtual auto serialized_size() const -> std::size_t = 0;
+	virtual void serialize(std::ostream& os) const = 0;
+	virtual void deserialize(std::istream& is) = 0;
 };
 
 #endif

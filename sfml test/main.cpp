@@ -11,6 +11,7 @@
 #include <list>
 #include <map>
 #include "Block.h"
+#include <stdlib.h>
 
 using namespace sf;
 
@@ -26,18 +27,52 @@ int main()
 {
 	std::list<Block> blocks;
 
-	blocks.push_back(Block(static_cast<block_types>(0), "imagez/floor1.png", true, true));
+	/*blocks.push_back(Block(static_cast<block_types>(0), "imagez/floor1.png", true, true));
 	blocks.push_back(Block(static_cast<block_types>(1), "imagez/wall1.png", true, false));
 
 	for (auto block : blocks) {
 		Block::allBlocks.insert(std::make_pair(block.getBlockName(), block));
 	}
 	
-	std::ofstream blockFile("data.dat", std::ios::binary & std::ios::app);
-
-	for (auto block : blocks) {
-		block.serialize(blockFile);
+	std::ofstream blockFile("C://Users//USER//Desktop//TPPO//sfml test//sfml test//data//data.bin", std::ios::binary & std::ios::app);
+	try {
+		if (blockFile.is_open()) {
+			for (auto block : blocks) {
+				block.serialize(blockFile);
+			}
+		}
 	}
+	catch (std::ios_base::failure) {
+		std::cerr << "error occured while serializing a file";
+		exit(-1);
+	}*/
+
+	//blocks.clear();
+	// BLOCK FILE READ ( I HONESTLY DONT LIKE THIS PART (REWORK REQUIRED) ) 
+	std::ifstream blocksFile("C://Users//USER//Desktop//TPPO//sfml test//sfml test//data//data.bin", std::ios::binary); 
+	try {
+		blocks.push_back(Block());
+		std::list<Block>::iterator it = blocks.begin();
+		
+		blocksFile.seekg(0, std::ios::end);
+		std::streampos end_of_file = blocksFile.tellg();
+		blocksFile.seekg(0, std::ios::beg);
+
+		if (blocksFile.is_open()) {
+			while (blocksFile.tellg() != end_of_file) {
+				it->deserialize(blocksFile);
+				blocks.push_back(Block());
+				it++;
+			}
+			blocks.pop_back();
+		}
+
+	}
+	catch (std::ios::failure) {
+		std::cerr << "error occured while deserializing a file";
+		exit(-1);
+	}
+
 
 	//room
 	Room mainroom(9,16);

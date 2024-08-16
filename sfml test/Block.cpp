@@ -58,17 +58,32 @@ Block::Block(block_types blockName, std::string img_path, bool visible, bool pas
 	this->sprite.setTexture(texture);
 }
 
-bool Block::serialize(std::ostream& os){
-	os.write(reinterpret_cast<char*>(this),sizeof(this));
-	return true;
+void Block::serialize(std::ostream& os) const {
+
+	int blockName = static_cast<int>(this->blockName); // enum to int value
+	os.write(reinterpret_cast<const char*>(&blockName), sizeof(int)); // block name write
+
+	int img_pathLength = static_cast<int>(this->img_path.length()); // image length
+	os.write(reinterpret_cast<const char*>(&img_pathLength),sizeof(int)); // img length write
+	os.write(this->img_path.c_str(), img_pathLength); //img_path write
+
+	bool isPassable = this->passable;
+	bool isVisible = this->visible;
+	os.write(reinterpret_cast<const char*>(&isPassable),sizeof(bool));
+	os.write(reinterpret_cast<const char*>(&isVisible), sizeof(bool));
 }
 
-auto Block::deserialize(std::istream is) -> std::size_t {
-	std::size_t size = 25;
-	return size;
-}
+void Block::deserialize(std::istream& is) {
+	is.read(reinterpret_cast<char*>(&blockName), sizeof(int));
 
-auto Block::serialized_size() const -> std::size_t {
-	std::size_t size = 25;
-	return size;
+	int img_pathLength;
+	is.read(reinterpret_cast<char*>(&img_pathLength), sizeof(int));
+	img_path.resize(img_pathLength);
+	is.read(&img_path[0], img_pathLength);
+
+	this->texture.loadFromFile(img_path);
+	this->sprite.setTexture(texture);
+
+	is.read(reinterpret_cast<char*>(&passable), sizeof(bool));
+	is.read(reinterpret_cast<char*>(&visible), sizeof(bool));
 }
