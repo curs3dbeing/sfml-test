@@ -2,11 +2,8 @@
 #include "SFML\Window.hpp"
 #include "SFML\System.hpp"
 #include <iostream>
-<<<<<<< HEAD
 #include <fstream>
-=======
 #include <random>
->>>>>>> 0e6770bb7ab086314743ba5f8813fb7cdbf76dc9
 #include "Character.h"
 #include "Room.h"
 #include <vector>

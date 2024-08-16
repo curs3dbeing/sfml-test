@@ -39,7 +39,7 @@ public:
 	virtual bool isVisible();
 	virtual bool isPassable();
 	block_types& getBlockName();
-	auto serialize(std::ostream& os) const -> std::size_t;
+	bool serialize(std::ostream& os);
 	auto deserialize(std::istream os) -> std::size_t;
 	auto serialized_size() const -> std::size_t;
 };

@@ -7,7 +7,7 @@
 class Level {
 private:
 	int _levelN;
-	std::vector<Room> rooms;
+	//std::vector<Room> rooms;
 
 	std::mt19937 gen;
 

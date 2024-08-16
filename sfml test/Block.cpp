@@ -58,8 +58,9 @@ Block::Block(block_types blockName, std::string img_path, bool visible, bool pas
 	this->sprite.setTexture(texture);
 }
 
-auto Block::serialize(std::ostream& os) const -> std::size_t {
+bool Block::serialize(std::ostream& os){
 	os.write(reinterpret_cast<char*>(this),sizeof(this));
+	return true;
 }
 
 auto Block::deserialize(std::istream is) -> std::size_t {

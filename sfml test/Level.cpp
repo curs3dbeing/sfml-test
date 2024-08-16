@@ -8,6 +8,6 @@ void Level::generateLevel(float seed, int level) {
 
 	int room_num = level * 3 + dis(gen);
 
-	rooms.resize(room_num);
+	//rooms.resize(room_num);
 
 }
