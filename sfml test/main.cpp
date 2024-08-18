@@ -16,17 +16,21 @@
 
 using namespace sf;
 
+RenderWindow window(VideoMode(1920, 1080), "My Game", sf::Style::Fullscreen& (sf::Style::Titlebar | sf::Style::Close));
+
+Vector2f window_size = static_cast<sf::Vector2f>(window.getSize()); // window size
 std::map<block_types, Block> Block::allBlocks;
+sf::RectangleShape fog_of_war(window_size);
 
 void addBlock(std::vector<Block>&, Block);
 
 void Movement(Character& player, RectangleShape& vision_box, float& dt);
-RenderWindow window(VideoMode(1920, 1080), "My Game", sf::Style::Fullscreen & (sf::Style::Titlebar | sf::Style::Close));
-Vector2f window_size = static_cast<sf::Vector2f>(window.getSize()); // window size
+
 
 int main()
 {
 	std::list<Block> blocks;
+	fog_of_war.setFillColor(sf::Color::Black);
 
 	/*blocks.push_back(Block(static_cast<block_types>(0), "imagez/floor1.png", true, true));
 	blocks.push_back(Block(static_cast<block_types>(1), "imagez/wall1.png", true, false));
@@ -88,7 +92,7 @@ int main()
 
 	// player
 	float dt;
-	Clock dt_clock;
+	sf::Clock dt_clock;
 
 	Character player;
 	player.setSpeed(400.f);
@@ -135,6 +139,8 @@ int main()
 		window.clear();
 		mainroom.roomDraw(window);
 		window.draw(vision_box);
+		//window.draw(fog_of_war);
+		window.draw(player.getVisionCircle());
 		window.draw(player.getSprite());
 
 		Movement(player, vision_box, dt);

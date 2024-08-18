@@ -4,10 +4,12 @@
 #include <string>
 #include <iostream>
 
+
 extern sf::Vector2f window_size;
 
 Character::Character() {
-
+	visionCircle.setFillColor(sf::Color::Transparent);
+	visionCircle.setRadius(300.f);
 }
 
 Character::Character(float _HP, std::string _Name, std::string img_path, float speed) : Entity(_HP, _Name, img_path) {
@@ -22,8 +24,15 @@ float Character::getSpeed() {
 	return this->speed;
 }
 
-sf::RectangleShape& Character::getHitbox() {
-	return this->hitbox;
+sf::CircleShape& Character::getVisionCircle() {
+	return this->visionCircle;
+}
+
+void Character::setVisionCircle(sf::CircleShape& visioncircle) {
+	visionCircle = visioncircle;
+}
+void Character::changeVisionCircle(float radius) {
+	this->visionCircle.setRadius(radius);
 }
 
 void Character::setTexture(std::string path) {

@@ -13,7 +13,9 @@ public:
 	void setSpeed(float _speed);
 	float getSpeed();
 
-	sf::RectangleShape& getHitbox();
+	sf::CircleShape& getVisionCircle();
+	void setVisionCircle(sf::CircleShape&);
+	void changeVisionCircle(float radius);
 
 	void setTexture(std::string path);
 	sf::Texture& getTexture();
@@ -22,7 +24,7 @@ public:
 
 private:
 	float speed;
-	sf::RectangleShape hitbox;
+	sf::CircleShape visionCircle;
 };
 
 #endif
