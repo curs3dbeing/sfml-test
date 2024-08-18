@@ -12,8 +12,20 @@ Entity::Entity(float _HP, std::string _Name, std::string img_path) : HP(_HP), Na
 	this->sprite.setTexture(this->texture);
 }
 
-float Entity::getHP() {
+float& Entity::getHP() {
 	return this->HP;
+}
+
+void Entity::zeroVelocity() {
+	this->velocity = sf::Vector2f(0.f, 0.f);
+}
+
+void Entity::setVelocity(sf::Vector2f velocity) {
+	this->velocity += velocity;
+}
+
+sf::Vector2f& Entity::getVelocity() {
+	return this->velocity;
 }
 
 std::string Entity::getName() {

@@ -16,7 +16,8 @@ public:
 	Room(int n, int k);
 	~Room();
 	void roomDraw(sf::RenderWindow& window);
-	void setBlocks(sf::Texture&);
+	void setFloor(sf::Texture&);
+	void setWalls(sf::Texture&);
 };
 
 #endif

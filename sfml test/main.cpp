@@ -10,6 +10,7 @@
 #include <set>
 #include <list>
 #include <map>
+#include <cmath>
 #include "Block.h"
 #include <stdlib.h>
 
@@ -19,8 +20,8 @@ std::map<block_types, Block> Block::allBlocks;
 
 void addBlock(std::vector<Block>&, Block);
 
-void Movement(Sprite& rect, RectangleShape& vision_box);
-RenderWindow window(VideoMode(1920, 1080), "My Game", sf::Style::Default);
+void Movement(Character& player, RectangleShape& vision_box, float& dt);
+RenderWindow window(VideoMode(1920, 1080), "My Game", sf::Style::Fullscreen & (sf::Style::Titlebar | sf::Style::Close));
 Vector2f window_size = static_cast<sf::Vector2f>(window.getSize()); // window size
 
 int main()
@@ -43,7 +44,7 @@ int main()
 		}
 	}
 	catch (std::ios_base::failure) {
-		std::cerr << "error occured while serializing a file";
+		std::cerr << "error occured while serializing a blocks file";
 		exit(-1);
 	}*/
 
@@ -69,24 +70,31 @@ int main()
 		}
 
 	}
-	catch (std::ios::failure) {
-		std::cerr << "error occured while deserializing a file";
+	catch (std::ios_base::failure) {
+		std::cerr << "error occured while deserializing a blocks file";
 		exit(-1);
 	}
 
+	for (auto block : blocks) {
+		Block::allBlocks.insert(std::make_pair(block.getBlockName(),block));
+	}
 
 	//room
-	Room mainroom(9,16);
-	sf::Texture blocktexture;
-	std::string floorpath = "imagez/floor1.png";
-	blocktexture.loadFromFile(floorpath);
-	mainroom.setBlocks(blocktexture);
-
-	
+	int y_size = 1080 / 64;
+	int x_size = 1920 / 64;
+	Room mainroom(y_size,x_size-1);
+	mainroom.setFloor(Block::allBlocks[block_types::floor1].getTexture());
+	mainroom.setWalls(Block::allBlocks[block_types::wall1].getTexture());
 
 	// player
-	Character player; 
-	std::string path = "imagez/hero.png";	
+	float dt;
+	Clock dt_clock;
+
+	Character player;
+	player.setSpeed(400.f);
+
+	std::string path = "imagez/hero.png";
+
 	player.setTexture(path);
 	player.setSprite();
 	player.getSprite().move(window_size.x / 2 - player.getTexture().getSize().x/2, window_size.y / 2 - player.getTexture().getSize().y/2);
@@ -105,6 +113,9 @@ int main()
 	vision_box.move(window_size.x / 2 - vision_box.getSize().x/2, window_size.y / 2 - vision_box.getSize().y / 2);
 	Event ev;
 	while (window.isOpen()) {
+
+		dt = dt_clock.restart().asSeconds();
+
 		while (window.pollEvent(ev)) {
 
 			switch (ev.type) {
@@ -118,51 +129,63 @@ int main()
 				break;
 			}
 		}
-			window.clear();
-			mainroom.roomDraw(window);
-			window.draw(vision_box);
-			window.draw(player.getSprite());
 
-			Movement(player.getSprite(), vision_box);
+		player.zeroVelocity();
 
-			window.display();
+		window.clear();
+		mainroom.roomDraw(window);
+		window.draw(vision_box);
+		window.draw(player.getSprite());
+
+		Movement(player, vision_box, dt);
+
+		window.display();
 
 	}
 }
 
 
 //vision_box is not used for now
-void Movement(Sprite& rect, RectangleShape& vision_box) {
+void Movement(Character& player, RectangleShape& vision_box, float& dt) {
+
 	if (Keyboard::isKeyPressed(Keyboard::W) && Keyboard::isKeyPressed(Keyboard::D)) {
-		rect.move(5.f, -5.f);
+		player.setVelocity(sf::Vector2f(player.getSpeed()*dt/sqrt(2), -player.getSpeed() * dt / sqrt(2)));
+		player.getSprite().move(player.getVelocity());
 		return;
 	}
 	if (Keyboard::isKeyPressed(Keyboard::W) && Keyboard::isKeyPressed(Keyboard::A)) {
-		rect.move(-5.f, -5.f);
+		player.setVelocity(sf::Vector2f(-player.getSpeed() * dt / sqrt(2), -player.getSpeed() * dt / sqrt(2)));
+		player.getSprite().move(player.getVelocity());
 		return;
 	}
 	if (Keyboard::isKeyPressed(Keyboard::S) && Keyboard::isKeyPressed(Keyboard::A)) {
-		rect.move(-5.f, 5.f);
+		player.setVelocity(sf::Vector2f(-player.getSpeed() * dt / sqrt(2), player.getSpeed() * dt / sqrt(2)));
+		player.getSprite().move(player.getVelocity());
 		return;
 	}
 	if (Keyboard::isKeyPressed(Keyboard::S) && Keyboard::isKeyPressed(Keyboard::D)) {
-		rect.move(5.f, 5.f);
+		player.setVelocity(sf::Vector2f(player.getSpeed() * dt / sqrt(2), player.getSpeed() * dt / sqrt(2)));
+		player.getSprite().move(player.getVelocity());
 		return;
 	}
 	if (Keyboard::isKeyPressed(Keyboard::W)) {
-		rect.move(0.f, -7.07f);
+		player.setVelocity(sf::Vector2f(0, -player.getSpeed() * dt));
+		player.getSprite().move(player.getVelocity());
 		return;
 	}
 	if (Keyboard::isKeyPressed(Keyboard::A)) {
-		rect.move(-7.07f, 0.f);
+		player.setVelocity(sf::Vector2f(-player.getSpeed() * dt, 0));
+		player.getSprite().move(player.getVelocity());
 		return;
 	}
 	if (Keyboard::isKeyPressed(Keyboard::S)) {
-		rect.move(0.f, 7.07f);
+		player.setVelocity(sf::Vector2f(0, player.getSpeed() * dt));
+		player.getSprite().move(player.getVelocity());
 		return;
 	}
 	if (Keyboard::isKeyPressed(Keyboard::D)) {
-		rect.move(7.07f, 0.f);
+		player.setVelocity(sf::Vector2f(player.getSpeed() * dt, 0));
+		player.getSprite().move(player.getVelocity());
 		return;
 	}
 }

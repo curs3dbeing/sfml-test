@@ -4,7 +4,7 @@
 
 
 
-Room::Room(int n, int k) {
+Room::Room(int n /*y size*/, int k /*x_size*/) {
 	this->x_size = k;
 	this->y_size = n;
 	this->room_size = new Block * [n];
@@ -25,13 +25,25 @@ Room::~Room() {
 void Room::roomDraw(sf::RenderWindow& window) {
 	for (int i = 0; i < y_size; i++) {
 		for (int j = 0; j < x_size; j++) {
-			//room_size[i][j].getSprite().move(sf::Vector2f(100.f*j,100.f*i));
 			window.draw(room_size[i][j].getSprite());
 		}
 	}
 }
 
-void Room::setBlocks(sf::Texture& texture) {
+void Room::setWalls(sf::Texture& texture) {
+	int x = texture.getSize().x;
+	int y = texture.getSize().y;
+	int x_size = 1920 / x;
+	int y_size = 1080 / y;
+	for (int i = 0; i < y_size; i++) {
+		for (int j = 0; j < x_size; j++) {
+			//this->room_size[i][j].setTexture(texture);
+			//this->room_size[i][j].setPosition(sf::Vector2f(x * j, y * i));
+		}
+	}
+}
+
+void Room::setFloor(sf::Texture& texture) {
 	for (int i = 0; i < y_size; i++) {
 		for (int j = 0; j < x_size; j++) {
 			this->room_size[i][j].setTexture(texture);
