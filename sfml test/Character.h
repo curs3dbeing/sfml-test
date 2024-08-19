@@ -19,7 +19,8 @@ public:
 
 	void setTexture(std::string path);
 	sf::Texture& getTexture();
-
+	void setPosition(sf::Vector2f newpos);
+	sf::Vector2f getPosition();
 	void setSprite();
 
 private:

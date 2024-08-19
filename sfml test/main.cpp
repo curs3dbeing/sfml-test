@@ -102,7 +102,7 @@ int main()
 	player.setTexture(path);
 	player.setSprite();
 	player.getSprite().move(window_size.x / 2 - player.getTexture().getSize().x/2, window_size.y / 2 - player.getTexture().getSize().y/2);
-
+	
 
 
 	RectangleShape vision_box(Vector2f(700.f, 400.f)); // vision box - box for camera movement 
@@ -144,6 +144,23 @@ int main()
 		window.draw(player.getSprite());
 
 		Movement(player, vision_box, dt);
+
+		if (player.getPosition().x <= 0.f) { //left wall collision
+			player.setPosition(sf::Vector2f(0.f, player.getPosition().y));
+		}
+
+		if (player.getPosition().y <= 0.f) { //top wall collision
+			player.setPosition(sf::Vector2f(player.getPosition().x, 0.f));
+		}
+
+		if (player.getPosition().x + player.getSprite().getGlobalBounds().width >= window_size.x) { //right wall collision
+			player.setPosition(sf::Vector2f(window_size.x - player.getSprite().getGlobalBounds().width, player.getPosition().y));
+		}
+
+		if (player.getPosition().y + player.getSprite().getGlobalBounds().height >= window_size.y) { //bottom wall collision
+			player.setPosition(sf::Vector2f(player.getPosition().x, window_size.y-player.getSprite().getGlobalBounds().height));
+		}
+
 
 		window.display();
 

@@ -43,6 +43,15 @@ void Character::setSprite() {
 	this->sprite.setTexture(this->getTexture());
 }
 
+void Character::setPosition(sf::Vector2f newpos) {
+	this->sprite.setPosition(newpos);
+}
+
+sf::Vector2f Character::getPosition() {
+	return this->getSprite().getGlobalBounds().getPosition();
+}
+
+
 sf::Texture& Character::getTexture() {
 	return this->texture;
 }
