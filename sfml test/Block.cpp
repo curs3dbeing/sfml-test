@@ -49,6 +49,14 @@ sf::Texture& Block::getTexture() {
 	return this->texture;
 }
 
+std::string Block::getImgPath() {
+	return this->img_path;
+}
+
+void Block::setTextureReapeted(bool repeat) {
+	this->texture.setRepeated(repeat);
+}
+
 block_types& Block::getBlockName() {
 	return this->blockName;
 }

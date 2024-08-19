@@ -30,7 +30,9 @@ public:
 	Block();
 	Block(std::string,bool,bool);
 	Block(block_types, std::string, bool, bool);
+	void setTextureReapeted(bool repeat);
 	sf::Sprite& getSprite();
+	std::string getImgPath();
 	void setTexture(sf::Texture&);
 	sf::Texture& getTexture();
 	void setVisible(bool);

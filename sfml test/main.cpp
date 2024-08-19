@@ -18,11 +18,17 @@ using namespace sf;
 
 RenderWindow window(VideoMode(1920, 1080), "My Game", sf::Style::Fullscreen& (sf::Style::Titlebar | sf::Style::Close));
 
-Vector2f window_size = static_cast<sf::Vector2f>(window.getSize()); // window size
-std::map<block_types, Block> Block::allBlocks;
-sf::RectangleShape fog_of_war(window_size);
 
-void addBlock(std::vector<Block>&, Block);
+
+Vector2f window_size = static_cast<sf::Vector2f>(window.getSize()); // window size
+sf::View Camera(sf::FloatRect((window_size.x-1152.f)/2, (window_size.y - 648.f) / 2, 1152.f, 648.f)); // camera view
+
+std::map<block_types, Block> Block::allBlocks; // hash-table of all blocks
+
+sf::RectangleShape fog_of_war(window_size); // fog_of_war
+sf::RectangleShape levelFloor(sf::Vector2f(-5000.f, -5000.f)); // floor
+
+void addBlock(std::vector<Block>&, Block); 
 
 void Movement(Character& player, RectangleShape& vision_box, float& dt);
 
@@ -31,7 +37,8 @@ int main()
 {
 	std::list<Block> blocks;
 	fog_of_war.setFillColor(sf::Color::Black);
-
+	levelFloor.move(sf::Vector2f(2500.f,2500.f));
+	
 	/*blocks.push_back(Block(static_cast<block_types>(0), "imagez/floor1.png", true, true));
 	blocks.push_back(Block(static_cast<block_types>(1), "imagez/wall1.png", true, false));
 
@@ -83,6 +90,10 @@ int main()
 		Block::allBlocks.insert(std::make_pair(block.getBlockName(),block));
 	}
 
+	Block::allBlocks[block_types::floor1].setTextureReapeted(true);
+	levelFloor.setTexture(&Block::allBlocks[block_types::floor1].getTexture());
+	levelFloor.setTextureRect(sf::IntRect(levelFloor.getPosition().x,levelFloor.getPosition().y, levelFloor.getSize().x,levelFloor.getSize().y));
+
 	//room
 	int y_size = 1080 / 64;
 	int x_size = 1920 / 64;
@@ -102,15 +113,12 @@ int main()
 	player.setTexture(path);
 	player.setSprite();
 	player.getSprite().move(window_size.x / 2 - player.getTexture().getSize().x/2, window_size.y / 2 - player.getTexture().getSize().y/2);
-	
-
 
 	RectangleShape vision_box(Vector2f(700.f, 400.f)); // vision box - box for camera movement 
 	// vision box atributes for modeling the camera movement and etc.
-	vision_box.setOutlineThickness(3.f);
-	vision_box.setOutlineColor(Color::White);
-	vision_box.setFillColor(Color::Black);
 	vision_box.setFillColor(Color::Transparent);
+	vision_box.setOutlineThickness(10.f);
+	vision_box.setOutlineColor(sf::Color::White);
 
 	window.setFramerateLimit(120); //FPS border(just in case)
 
@@ -136,8 +144,10 @@ int main()
 
 		player.zeroVelocity();
 
+		window.setView(Camera);
 		window.clear();
-		mainroom.roomDraw(window);
+		//mainroom.roomDraw(window);
+		window.draw(levelFloor);
 		window.draw(vision_box);
 		//window.draw(fog_of_war);
 		window.draw(player.getVisionCircle());
@@ -145,22 +155,40 @@ int main()
 
 		Movement(player, vision_box, dt);
 
-		if (player.getPosition().x <= 0.f) { //left wall collision
-			player.setPosition(sf::Vector2f(0.f, player.getPosition().y));
+		if (player.getPosition().x <= vision_box.getGlobalBounds().getPosition().x) { //left wall
+			if (player.getPosition().y > vision_box.getGlobalBounds().getPosition().y || player.getPosition().y + player.getSprite().getGlobalBounds().height < vision_box.getGlobalBounds().height + vision_box.getPosition().y) {
+				vision_box.move(player.getVelocity().x,0);
+				Camera.move(player.getVelocity().x, 0);
+			}
 		}
-
-		if (player.getPosition().y <= 0.f) { //top wall collision
-			player.setPosition(sf::Vector2f(player.getPosition().x, 0.f));
+		if (player.getPosition().y <= vision_box.getGlobalBounds().getPosition().y) { //top wall
+			vision_box.move(player.getVelocity());
+			Camera.move(player.getVelocity());
 		}
-
-		if (player.getPosition().x + player.getSprite().getGlobalBounds().width >= window_size.x) { //right wall collision
-			player.setPosition(sf::Vector2f(window_size.x - player.getSprite().getGlobalBounds().width, player.getPosition().y));
+		if (player.getPosition().x+player.getSprite().getGlobalBounds().width >= vision_box.getGlobalBounds().width+vision_box.getPosition().x) { //right wall
+			vision_box.move(player.getVelocity());
+			Camera.move(player.getVelocity());
 		}
-
-		if (player.getPosition().y + player.getSprite().getGlobalBounds().height >= window_size.y) { //bottom wall collision
-			player.setPosition(sf::Vector2f(player.getPosition().x, window_size.y-player.getSprite().getGlobalBounds().height));
+		if (player.getPosition().y+player.getSprite().getGlobalBounds().height >= vision_box.getGlobalBounds().height + vision_box.getPosition().y) { //bottom wall
+			vision_box.move(player.getVelocity());
+			Camera.move(player.getVelocity());
 		}
+		
+		//if (player.getPosition().x <= 0.f) { //left wall collision
+		//	player.setPosition(sf::Vector2f(0.f, player.getPosition().y));
+		//}
 
+		//if (player.getPosition().y <= 0.f) { //top wall collision
+		//	player.setPosition(sf::Vector2f(player.getPosition().x, 0.f));
+		//}
+
+		//if (player.getPosition().x + player.getSprite().getGlobalBounds().width >= window_size.x) { //right wall collision
+		//	player.setPosition(sf::Vector2f(window_size.x - player.getSprite().getGlobalBounds().width, player.getPosition().y));
+		//}
+
+		//if (player.getPosition().y + player.getSprite().getGlobalBounds().height >= window_size.y) { //bottom wall collision
+		//	player.setPosition(sf::Vector2f(player.getPosition().x, window_size.y-player.getSprite().getGlobalBounds().height));
+		//}
 
 		window.display();
 
@@ -220,11 +248,3 @@ void addBlock(std::vector<Block>& allBlocks, Block block) {
 	block_types blockName = block.getBlockName();
 
 }
-
-//block_types blockName;
-//std::string img_path;
-//sf::Sprite sprite;
-//sf::RectangleShape shape;
-//sf::Texture texture;
-//bool visible;
-//bool passable;

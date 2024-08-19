@@ -38,6 +38,7 @@ void Character::changeVisionCircle(float radius) {
 void Character::setTexture(std::string path) {
 	this->img_path = path;
 	this->texture.loadFromFile(path);
+	this->texture.setSmooth(true);
 }
 void Character::setSprite() {
 	this->sprite.setTexture(this->getTexture());
