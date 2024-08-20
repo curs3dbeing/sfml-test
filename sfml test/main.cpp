@@ -30,6 +30,16 @@ sf::RectangleShape levelFloor(sf::Vector2f(-5000.f, -5000.f)); // floor
 
 void addBlock(std::vector<Block>&, Block); 
 
+
+void Shoot(Character& player, float& dt, sf::Texture& bullet_txt);
+//Bullet stuff
+bool canShoot = true;
+const float shootCd = 0.2f;
+float lastShoot = 0.f;
+sf::Vector2f mousePos;
+const float bullet_vel = 400;
+
+
 void Movement(Character& player, RectangleShape& vision_box, float& dt);
 
 
@@ -110,6 +120,11 @@ int main()
 	player.setSpeed(200.f);
 
 	std::string path = "imagez/hero.png";
+	std::string bullet_img = "imagez/bullet.png";
+
+	sf::Texture bullet;
+	bullet.loadFromFile(bullet_img);
+	bullet.setSmooth(true);
 
 	player.setTexture(path);
 	player.setSprite();
@@ -128,6 +143,7 @@ int main()
 	while (window.isOpen()) {
 
 		dt = dt_clock.restart().asSeconds();
+		mousePos = sf::Vector2f(sf::Mouse::getPosition());
 
 		while (window.pollEvent(ev)) {
 
@@ -157,6 +173,7 @@ int main()
 		window.draw(player.getSprite());
 
 		Movement(player, vision_box, dt);
+		Shoot(player, dt, bullet);
 
 		if (player.getPosition().x <= vision_box.getGlobalBounds().getPosition().x) { //left wall
 			if (player.getPosition().y > vision_box.getGlobalBounds().getPosition().y || player.getPosition().y + player.getSprite().getGlobalBounds().height < vision_box.getGlobalBounds().height + vision_box.getPosition().y) {
@@ -204,6 +221,41 @@ int main()
 	}
 }
 
+void Shoot(Character& player, float& dt, sf::Texture& bullet_txt) {
+	if (Keyboard::isKeyPressed(Keyboard::Space) && canShoot) {
+
+		lastShoot = 0.f;
+		canShoot = false;
+
+		sf::FloatRect bounds = player.getSprite().getGlobalBounds();
+		sf::Vector2f pos(bounds.left + bounds.width / 2 - bounds.width / 6, bounds.top + bounds.height / 2 - bounds.height / 6);
+
+		sf::Vector2f direction = mousePos - player.getCenteredPosition();
+		float length = std::sqrt(direction.x * direction.x + direction.y * direction.y);
+		if (length != 0.f) {
+			direction /= length;
+		}
+
+		player.bullets.push_back(std::make_unique<Bullet>(10.f, direction * bullet_vel, bullet_txt, pos));
+	}
+
+	lastShoot += dt;
+
+	if (lastShoot > shootCd) {
+		canShoot = true;
+	}
+
+	for (auto it = player.bullets.begin(); it != player.bullets.end(); ) {
+		it->get()->update(dt);
+		if (it->get()->isExpired()) {
+			it = player.bullets.erase(it);
+		}
+		else {
+			window.draw(it->get()->getSprite());
+			++it;
+		}
+	}
+}
 
 //vision_box is not used for now
 void Movement(Character& player, RectangleShape& vision_box, float& dt) {

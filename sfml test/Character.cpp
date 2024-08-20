@@ -52,6 +52,10 @@ sf::Vector2f Character::getPosition() {
 	return this->getSprite().getGlobalBounds().getPosition();
 }
 
+sf::Vector2f Character::getCenteredPosition() {
+	sf::FloatRect bounds = sprite.getGlobalBounds();
+	return sf::Vector2f(bounds.left + bounds.width / 2, bounds.top + bounds.height / 2);
+}
 
 sf::Texture& Character::getTexture() {
 	return this->texture;

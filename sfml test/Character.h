@@ -3,6 +3,8 @@
 #include "Entity.h"
 #include "SFML/Graphics.hpp"
 #include <string>
+#include "Bullet.h"
+#include <memory>
 
 class Character : public Entity
 {
@@ -21,7 +23,14 @@ public:
 	sf::Texture& getTexture();
 	void setPosition(sf::Vector2f newpos);
 	sf::Vector2f getPosition();
+	sf::Vector2f getCenteredPosition();
 	void setSprite();
+
+
+
+	//TODO refactor this code
+	std::vector<std::unique_ptr<Bullet>> bullets;
+
 
 private:
 	float speed;
