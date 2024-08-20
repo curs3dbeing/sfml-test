@@ -21,7 +21,7 @@ RenderWindow window(VideoMode(1920, 1080), "My Game", sf::Style::Fullscreen& (sf
 
 
 Vector2f window_size = static_cast<sf::Vector2f>(window.getSize()); // window size
-sf::View Camera(sf::FloatRect((window_size.x-1152.f)/2, (window_size.y - 648.f) / 2, 1152.f, 648.f)); // camera view
+sf::View Camera(sf::FloatRect((window_size.x-1612.8f)/2, (window_size.y - 907.2f) / 2, 1612.8f, 907.2f)); // camera view
 
 std::map<block_types, Block> Block::allBlocks; // hash-table of all blocks
 
@@ -38,7 +38,7 @@ int main()
 	std::list<Block> blocks;
 	fog_of_war.setFillColor(sf::Color::Black);
 	levelFloor.move(sf::Vector2f(2500.f,2500.f));
-	
+	window.setVerticalSyncEnabled(true);
 	/*blocks.push_back(Block(static_cast<block_types>(0), "imagez/floor1.png", true, true));
 	blocks.push_back(Block(static_cast<block_types>(1), "imagez/wall1.png", true, false));
 
@@ -117,10 +117,10 @@ int main()
 	RectangleShape vision_box(Vector2f(700.f, 400.f)); // vision box - box for camera movement 
 	// vision box atributes for modeling the camera movement and etc.
 	vision_box.setFillColor(Color::Transparent);
-	vision_box.setOutlineThickness(10.f);
-	vision_box.setOutlineColor(sf::Color::White);
+	/*vision_box.setOutlineThickness(10.f);
+	vision_box.setOutlineColor(sf::Color::White);*/
 
-	window.setFramerateLimit(120); //FPS border(just in case)
+	window.setFramerateLimit(300); //FPS border(just in case)
 
 	vision_box.move(window_size.x / 2 - vision_box.getSize().x/2, window_size.y / 2 - vision_box.getSize().y / 2);
 	Event ev;
@@ -157,25 +157,31 @@ int main()
 
 		if (player.getPosition().x <= vision_box.getGlobalBounds().getPosition().x) { //left wall
 			if (player.getPosition().y > vision_box.getGlobalBounds().getPosition().y || player.getPosition().y + player.getSprite().getGlobalBounds().height < vision_box.getGlobalBounds().height + vision_box.getPosition().y) {
-				vision_box.move(player.getVelocity().x,0);
-				Camera.move(player.getVelocity().x, 0);
+				vision_box.move(player.getVelocity().x,0.f);
+				Camera.move(player.getVelocity().x, 0.f);
 			}
 		}
 		if (player.getPosition().y <= vision_box.getGlobalBounds().getPosition().y) { //top wall
-			vision_box.move(player.getVelocity());
-			Camera.move(player.getVelocity());
+			if (player.getPosition().x > vision_box.getGlobalBounds().getPosition().x || player.getPosition().x + player.getSprite().getGlobalBounds().width < vision_box.getGlobalBounds().width + vision_box.getPosition().x) {
+				vision_box.move(0.f,player.getVelocity().y);
+				Camera.move(0.f,player.getVelocity().y);
+			}
 		}
 		if (player.getPosition().x+player.getSprite().getGlobalBounds().width >= vision_box.getGlobalBounds().width+vision_box.getPosition().x) { //right wall
-			vision_box.move(player.getVelocity());
-			Camera.move(player.getVelocity());
+			if (player.getPosition().y > vision_box.getGlobalBounds().getPosition().y || player.getPosition().y + player.getSprite().getGlobalBounds().height < vision_box.getGlobalBounds().height + vision_box.getPosition().y) {
+				vision_box.move(player.getVelocity().x,0.f);
+				Camera.move(player.getVelocity().x,0.f);
+			}
 		}
 		if (player.getPosition().y+player.getSprite().getGlobalBounds().height >= vision_box.getGlobalBounds().height + vision_box.getPosition().y) { //bottom wall
-			vision_box.move(player.getVelocity());
-			Camera.move(player.getVelocity());
+			if (player.getPosition().x > vision_box.getGlobalBounds().getPosition().x || player.getPosition().x + player.getSprite().getGlobalBounds().width < vision_box.getGlobalBounds().width + vision_box.getPosition().x) {
+				vision_box.move(0.f, player.getVelocity().y);
+				Camera.move(0.f, player.getVelocity().y);
+			}
 		}
 		
-		//if (player.getPosition().x <= 0.f) { //left wall collision
-		//	player.setPosition(sf::Vector2f(0.f, player.getPosition().y));
+		//if (player.getPosition().x <= levelFloor.getPosition().x) { //left wall collision
+		//	player.setPosition(sf::Vector2f(levelFloor.getPosition().x, player.getPosition().y));
 		//}
 
 		//if (player.getPosition().y <= 0.f) { //top wall collision
