@@ -38,7 +38,7 @@ int main()
 	std::list<Block> blocks;
 	fog_of_war.setFillColor(sf::Color::Black);
 	levelFloor.move(sf::Vector2f(2500.f,2500.f));
-	window.setVerticalSyncEnabled(true);
+	//window.setVerticalSyncEnabled(true);
 	/*blocks.push_back(Block(static_cast<block_types>(0), "imagez/floor1.png", true, true));
 	blocks.push_back(Block(static_cast<block_types>(1), "imagez/wall1.png", true, false));
 
@@ -91,6 +91,7 @@ int main()
 	}
 
 	Block::allBlocks[block_types::floor1].setTextureReapeted(true);
+	Block::allBlocks[block_types::floor1].setTextureSmooth(true);
 	levelFloor.setTexture(&Block::allBlocks[block_types::floor1].getTexture());
 	levelFloor.setTextureRect(sf::IntRect(levelFloor.getPosition().x,levelFloor.getPosition().y, levelFloor.getSize().x,levelFloor.getSize().y));
 
@@ -106,7 +107,7 @@ int main()
 	sf::Clock dt_clock;
 
 	Character player;
-	player.setSpeed(400.f);
+	player.setSpeed(200.f);
 
 	std::string path = "imagez/hero.png";
 
@@ -133,7 +134,7 @@ int main()
 			switch (ev.type) {
 			case Event::KeyPressed:
 			{
-				if (ev.key.code == Keyboard::Escape) {
+				if (ev.key.code==Keyboard::Escape) {
 					window.close();
 				}
 				break;

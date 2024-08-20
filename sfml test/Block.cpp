@@ -57,6 +57,10 @@ void Block::setTextureReapeted(bool repeat) {
 	this->texture.setRepeated(repeat);
 }
 
+void Block::setTextureSmooth(bool smooth) {
+	this->texture.setSmooth(smooth);
+}
+
 block_types& Block::getBlockName() {
 	return this->blockName;
 }
