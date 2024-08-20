@@ -131,9 +131,11 @@ int main()
 		while (window.pollEvent(ev)) {
 
 			switch (ev.type) {
-			case Keyboard::Escape:
+			case Event::KeyPressed:
 			{
-				window.close();
+				if (ev.key.code == Keyboard::Escape) {
+					window.close();
+				}
 				break;
 			}
 			case Event::Closed:
