@@ -6,6 +6,7 @@ public:
 	Bullet(float damage, sf::Vector2f velocity, sf::Texture& text, sf::Vector2f pos);
 	bool isExpired();
 	void update(float dt);
+	void rotate(float angle);
 	sf::Sprite& getSprite();
 private:
 	sf::Vector2f pos;

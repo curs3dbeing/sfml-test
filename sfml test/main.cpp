@@ -12,9 +12,11 @@
 #include <map>
 #include <cmath>
 #include "Block.h"
+#include "utils.h"
 #include <stdlib.h>
 
 using namespace sf;
+#define PI 3.1415926535
 
 RenderWindow window(VideoMode(1920, 1080), "My Game", sf::Style::Fullscreen& (sf::Style::Titlebar | sf::Style::Close));
 
@@ -34,10 +36,10 @@ void addBlock(std::vector<Block>&, Block);
 void Shoot(Character& player, float& dt, sf::Texture& bullet_txt);
 //Bullet stuff
 bool canShoot = true;
-const float shootCd = 0.2f;
+const float shootCd = 0.15f;
 float lastShoot = 0.f;
 sf::Vector2f mousePos;
-const float bullet_vel = 400;
+const float bullet_vel = 700;
 
 
 void Movement(Character& player, RectangleShape& vision_box, float& dt);
@@ -120,7 +122,7 @@ int main()
 	player.setSpeed(200.f);
 
 	std::string path = "imagez/hero.png";
-	std::string bullet_img = "imagez/bullet.png";
+	std::string bullet_img = "imagez/blue_bullet.png";
 
 	sf::Texture bullet;
 	bullet.loadFromFile(bullet_img);
@@ -231,12 +233,19 @@ void Shoot(Character& player, float& dt, sf::Texture& bullet_txt) {
 		sf::Vector2f pos(bounds.left + bounds.width / 2 - bounds.width / 6, bounds.top + bounds.height / 2 - bounds.height / 6);
 
 		sf::Vector2f direction = mousePos - player.getCenteredPosition();
+		bool fix_angle = direction.y > 0;
+		sf::Vector2f baseLine = sf::Vector2f(-1, 0);
 		float length = std::sqrt(direction.x * direction.x + direction.y * direction.y);
 		if (length != 0.f) {
 			direction /= length;
 		}
-
+		float cos = dot(direction, baseLine);
+		float angle = std::acos(cos) * 180 / PI;
+		if (fix_angle) {
+			angle = 360 - angle;
+		}
 		player.bullets.push_back(std::make_unique<Bullet>(10.f, direction * bullet_vel, bullet_txt, pos));
+		player.bullets[player.bullets.size() - 1].get()->rotate(angle);
 	}
 
 	lastShoot += dt;

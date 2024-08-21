@@ -21,3 +21,7 @@ void Bullet::update(float dt) {
 sf::Sprite& Bullet::getSprite() {
 	return sprite;
 }
+
+void Bullet::rotate(float angle) {
+	sprite.rotate(angle);
+}
