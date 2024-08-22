@@ -269,7 +269,34 @@ void Shoot(Character& player, float& dt, sf::Texture& bullet_txt) {
 //vision_box is not used for now
 void Movement(Character& player, RectangleShape& vision_box, float& dt) {
 
-	if (Keyboard::isKeyPressed(Keyboard::W) && Keyboard::isKeyPressed(Keyboard::D)) {
+	sf::Vector2f velocity(0.f, 0.f);
+
+	if (Keyboard::isKeyPressed(Keyboard::W)) {
+		velocity.y -= dt * player.getSpeed();
+	}
+
+	if (Keyboard::isKeyPressed(Keyboard::A)) {
+		velocity.x -= dt * player.getSpeed();
+	}
+
+	if (Keyboard::isKeyPressed(Keyboard::S)) {
+		velocity.y += dt * player.getSpeed();
+	}
+
+	if (Keyboard::isKeyPressed(Keyboard::D)) {
+		velocity.x += dt * player.getSpeed();
+	}
+
+	float l = sqrt(velocity.x * velocity.x + velocity.y * velocity.y);
+	if (l != 0) {
+		velocity /= l;
+	}
+
+	velocity *= player.getSpeed() * dt;
+	player.setVelocity(velocity);
+	player.getSprite().move(player.getVelocity());
+
+	/*if (Keyboard::isKeyPressed(Keyboard::W) && Keyboard::isKeyPressed(Keyboard::D)) {
 		player.setVelocity(sf::Vector2f(player.getSpeed()*dt/sqrt(2), -player.getSpeed() * dt / sqrt(2)));
 		player.getSprite().move(player.getVelocity());
 		return;
@@ -308,7 +335,8 @@ void Movement(Character& player, RectangleShape& vision_box, float& dt) {
 		player.setVelocity(sf::Vector2f(player.getSpeed() * dt, 0));
 		player.getSprite().move(player.getVelocity());
 		return;
-	}
+	}*/
+
 }
 
 void addBlock(std::vector<Block>& allBlocks, Block block) {
