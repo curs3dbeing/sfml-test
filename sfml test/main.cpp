@@ -21,9 +21,11 @@ using namespace sf;
 RenderWindow window(VideoMode(1920, 1080), "My Game", sf::Style::Fullscreen& (sf::Style::Titlebar | sf::Style::Close));
 
 
+const float CAMERA_HEIGHT = 907.2f;
+const float CAMERA_WIDTH = 1612.8f;
 
 Vector2f window_size = static_cast<sf::Vector2f>(window.getSize()); // window size
-sf::View Camera(sf::FloatRect((window_size.x-1612.8f)/2, (window_size.y - 907.2f) / 2, 1612.8f, 907.2f)); // camera view
+sf::View Camera(sf::FloatRect((window_size.x-CAMERA_WIDTH)/2, (window_size.y - CAMERA_HEIGHT) / 2, CAMERA_WIDTH, CAMERA_HEIGHT)); // camera view
 
 std::map<block_types, Block> Block::allBlocks; // hash-table of all blocks
 
@@ -110,7 +112,7 @@ int main()
 	//room
 	int y_size = 1080 / 64;
 	int x_size = 1920 / 64;
-	Room mainroom(y_size,x_size-1);
+	Room mainroom(y_size,x_size-1,sf::Vector2f(0.f,0.f));
 	mainroom.setFloor(Block::allBlocks[block_types::floor1].getTexture());
 	mainroom.setWalls(Block::allBlocks[block_types::wall1].getTexture());
 
@@ -167,8 +169,8 @@ int main()
 
 		window.setView(Camera);
 		window.clear();
-		//mainroom.roomDraw(window);
 		window.draw(levelFloor);
+		mainroom.roomDraw(window);
 		window.draw(vision_box);
 		//window.draw(fog_of_war);
 		window.draw(player.getVisionCircle());
@@ -201,22 +203,6 @@ int main()
 				Camera.move(0.f, player.getVelocity().y);
 			}
 		}
-		
-		//if (player.getPosition().x <= levelFloor.getPosition().x) { //left wall collision
-		//	player.setPosition(sf::Vector2f(levelFloor.getPosition().x, player.getPosition().y));
-		//}
-
-		//if (player.getPosition().y <= 0.f) { //top wall collision
-		//	player.setPosition(sf::Vector2f(player.getPosition().x, 0.f));
-		//}
-
-		//if (player.getPosition().x + player.getSprite().getGlobalBounds().width >= window_size.x) { //right wall collision
-		//	player.setPosition(sf::Vector2f(window_size.x - player.getSprite().getGlobalBounds().width, player.getPosition().y));
-		//}
-
-		//if (player.getPosition().y + player.getSprite().getGlobalBounds().height >= window_size.y) { //bottom wall collision
-		//	player.setPosition(sf::Vector2f(player.getPosition().x, window_size.y-player.getSprite().getGlobalBounds().height));
-		//}
 
 		window.display();
 
@@ -296,47 +282,6 @@ void Movement(Character& player, RectangleShape& vision_box, float& dt) {
 	player.setVelocity(velocity);
 	player.getSprite().move(player.getVelocity());
 
-	/*if (Keyboard::isKeyPressed(Keyboard::W) && Keyboard::isKeyPressed(Keyboard::D)) {
-		player.setVelocity(sf::Vector2f(player.getSpeed()*dt/sqrt(2), -player.getSpeed() * dt / sqrt(2)));
-		player.getSprite().move(player.getVelocity());
-		return;
-	}
-	if (Keyboard::isKeyPressed(Keyboard::W) && Keyboard::isKeyPressed(Keyboard::A)) {
-		player.setVelocity(sf::Vector2f(-player.getSpeed() * dt / sqrt(2), -player.getSpeed() * dt / sqrt(2)));
-		player.getSprite().move(player.getVelocity());
-		return;
-	}
-	if (Keyboard::isKeyPressed(Keyboard::S) && Keyboard::isKeyPressed(Keyboard::A)) {
-		player.setVelocity(sf::Vector2f(-player.getSpeed() * dt / sqrt(2), player.getSpeed() * dt / sqrt(2)));
-		player.getSprite().move(player.getVelocity());
-		return;
-	}
-	if (Keyboard::isKeyPressed(Keyboard::S) && Keyboard::isKeyPressed(Keyboard::D)) {
-		player.setVelocity(sf::Vector2f(player.getSpeed() * dt / sqrt(2), player.getSpeed() * dt / sqrt(2)));
-		player.getSprite().move(player.getVelocity());
-		return;
-	}
-	if (Keyboard::isKeyPressed(Keyboard::W)) {
-		player.setVelocity(sf::Vector2f(0, -player.getSpeed() * dt));
-		player.getSprite().move(player.getVelocity());
-		return;
-	}
-	if (Keyboard::isKeyPressed(Keyboard::A)) {
-		player.setVelocity(sf::Vector2f(-player.getSpeed() * dt, 0));
-		player.getSprite().move(player.getVelocity());
-		return;
-	}
-	if (Keyboard::isKeyPressed(Keyboard::S)) {
-		player.setVelocity(sf::Vector2f(0, player.getSpeed() * dt));
-		player.getSprite().move(player.getVelocity());
-		return;
-	}
-	if (Keyboard::isKeyPressed(Keyboard::D)) {
-		player.setVelocity(sf::Vector2f(player.getSpeed() * dt, 0));
-		player.getSprite().move(player.getVelocity());
-		return;
-	}*/
-
 }
 
 void addBlock(std::vector<Block>& allBlocks, Block block) {
@@ -344,5 +289,4 @@ void addBlock(std::vector<Block>& allBlocks, Block block) {
 	bool visible = block.isVisible();
 	bool passable = block.isPassable();
 	block_types blockName = block.getBlockName();
-
 }
