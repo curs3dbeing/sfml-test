@@ -7,6 +7,7 @@
 #include "Character.h"
 #include "Room.h"
 #include <vector>
+#include <map>
 #include <set>
 #include <list>
 #include <map>
@@ -48,6 +49,7 @@ void Movement(Character& player, RectangleShape& vision_box, float& dt);
 int main()
 {
 	std::list<Block> blocks;
+	std::map<std::string, sf::Texture> res = loadTextureFolder("imagez/bullets");
 	fog_of_war.setFillColor(sf::Color::Black);
 	levelFloor.move(sf::Vector2f(2500.f,2500.f));
 	//window.setVerticalSyncEnabled(true);
@@ -122,7 +124,7 @@ int main()
 	player.setSpeed(200.f);
 
 	std::string path = "imagez/hero.png";
-	std::string bullet_img = "imagez/blue_bullet.png";
+	std::string bullet_img = "imagez/bullets/bullet1.png";
 
 	sf::Texture bullet;
 	bullet.loadFromFile(bullet_img);
