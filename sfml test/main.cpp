@@ -119,7 +119,7 @@ int main()
 	sf::Clock dt_clock;
 
 	Character player;
-	player.setSpeed(200.f);
+	player.setSpeed(700.f);
 
 	std::string path = "imagez/hero.png";
 	std::string bullet_img = "imagez/blue_bullet.png";
