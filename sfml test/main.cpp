@@ -174,8 +174,6 @@ int main()
 			}
 		}
 
-		player.zeroVelocity();
-
 		window.setView(Camera);
 		window.clear();
 		window.draw(levelFloor);
@@ -193,7 +191,7 @@ int main()
 
 		mouseText.setString(std::to_string(mousePos.x) + " : " + std::to_string(mousePos.y));
 		mouseText.setCharacterSize(24);
-		mouseText.setPosition(Camera.getCenter().x - Camera.getSize().x / 2, Camera.getCenter().y - Camera.getSize().y / 2);
+		mouseText.setPosition(Camera.getCenter().x - Camera.getSize().x / 2 + 5, Camera.getCenter().y - Camera.getSize().y / 2 + 5);
 
 		window.draw(mouseText);
 
@@ -272,6 +270,7 @@ void Shoot(Character& player, float& dt, sf::Texture& bullet_txt) {
 
 //vision_box is not used for now
 void Movement(Character& player, RectangleShape& vision_box, float& dt) {
+	player.zeroVelocity();
 
 	sf::Vector2f velocity(0.f, 0.f);
 

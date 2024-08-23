@@ -13,7 +13,6 @@ private:
 	sf::Sprite sprite;
 	float damage;
 	const float lifeTime = 4.f;
-	float startTime;
 	float livedTime = 0.f;
 	const float baseSpeed = 400.f;
 	sf::Vector2f velocity;
