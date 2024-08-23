@@ -22,6 +22,7 @@ public:
 	void roomDraw(sf::RenderWindow& window);
 	void setFloor(sf::Texture&);
 	void setWalls(sf::Texture&);
+	std::vector<sf::Sprite>& getAllWalls();
 	sf::Vector2f getPos() const;
 };
 

@@ -18,9 +18,10 @@ public:
 	Entity();
 	Entity(float _HP, std::string _Name, std::string img_path);
 
+	virtual void setVelocity(sf::Vector2f);
 	virtual void zeroVelocity();
 	virtual sf::Vector2f& getVelocity();
-	virtual void setVelocity(sf::Vector2f);
+	virtual void addVelocity(sf::Vector2f);
 	virtual float& getHP();
 	virtual std::string getName();
 	virtual void setWeapon(Weapon _weapon);

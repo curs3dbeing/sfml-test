@@ -20,8 +20,12 @@ void Entity::zeroVelocity() {
 	this->velocity = sf::Vector2f(0.f, 0.f);
 }
 
-void Entity::setVelocity(sf::Vector2f velocity) {
+void Entity::addVelocity(sf::Vector2f velocity) {
 	this->velocity += velocity;
+}
+
+void Entity::setVelocity(sf::Vector2f velocity) {
+	this->velocity = velocity;
 }
 
 sf::Vector2f& Entity::getVelocity() {

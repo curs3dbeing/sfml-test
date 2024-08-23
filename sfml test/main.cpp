@@ -46,7 +46,7 @@ const float bullet_vel = 700;
 
 
 void Movement(Character& player, RectangleShape& vision_box, float& dt);
-
+void WallCollision(Character& player, Room& mainroom);
 
 int main()
 {
@@ -54,7 +54,7 @@ int main()
 	std::map<std::string, sf::Texture> res = loadTextureFolder("imagez/bullets");
 	fog_of_war.setFillColor(sf::Color::Black);
 	levelFloor.move(sf::Vector2f(2500.f,2500.f));
-	//window.setVerticalSyncEnabled(true);
+
 	/*blocks.push_back(Block(static_cast<block_types>(0), "imagez/floor1.png", true, true));
 	blocks.push_back(Block(static_cast<block_types>(1), "imagez/wall1.png", true, false));
 
@@ -179,6 +179,8 @@ int main()
 		window.draw(player.getSprite());
 
 		Movement(player, vision_box, dt);
+		WallCollision(player,mainroom);
+		player.getSprite().move(player.getVelocity());
 		Shoot(player, dt, bullet);
 
 		if (player.getPosition().x <= vision_box.getGlobalBounds().getPosition().x) { //left wall
@@ -281,9 +283,63 @@ void Movement(Character& player, RectangleShape& vision_box, float& dt) {
 	}
 
 	velocity *= player.getSpeed() * dt;
-	player.setVelocity(velocity);
-	player.getSprite().move(player.getVelocity());
+	player.addVelocity(velocity);
 
+	//player.getSprite().move(player.getVelocity()); //-> came into main.cpp after collision check function
+
+}
+
+
+void WallCollision(Character& player, Room& mainroom) {
+	for (auto& wall : mainroom.getAllWalls()) {
+
+		FloatRect wallBounds = wall.getGlobalBounds();
+		FloatRect playerBounds = player.getSprite().getGlobalBounds();
+		
+		FloatRect nextPos = playerBounds;
+		nextPos.left += player.getVelocity().x;
+		nextPos.top += player.getVelocity().y;
+
+		if (wallBounds.intersects(nextPos)) {
+			//Top Collision
+			if (playerBounds.top > wallBounds.top
+				&& playerBounds.top + playerBounds.height > wallBounds.top + wallBounds.height
+				&& playerBounds.left < wallBounds.left + wallBounds.width
+				&& playerBounds.left + playerBounds.width > wallBounds.left) 
+			{
+				player.setVelocity({ player.getVelocity().x, 0.f });
+				player.setPosition({ playerBounds.left,wallBounds.top + wallBounds.height });
+			}
+			//Bottom Collision
+			else if (playerBounds.top < wallBounds.top
+				&& playerBounds.top + playerBounds.height < wallBounds.top + wallBounds.height
+				&& playerBounds.left < wallBounds.left + wallBounds.width
+				&& playerBounds.left + playerBounds.width > wallBounds.left)
+			{
+				player.setVelocity({ player.getVelocity().x, 0.f });
+				player.setPosition({ playerBounds.left,wallBounds.top - playerBounds.height });
+			}
+			//Right Collision
+			if (playerBounds.left < wallBounds.left
+				&& playerBounds.left + playerBounds.width < wallBounds.left + wallBounds.width
+				&& playerBounds.top < wallBounds.top + wallBounds.height
+				&& playerBounds.top + playerBounds.height > wallBounds.top) 
+			{
+				player.setVelocity({0.f,player.getVelocity().y});
+				player.setPosition(sf::Vector2f(wallBounds.left-playerBounds.width, playerBounds.top));
+			}
+			//Left Collision
+			else if (playerBounds.left > wallBounds.left
+				&& playerBounds.left + playerBounds.width > wallBounds.left + wallBounds.width
+				&& playerBounds.top < wallBounds.top + wallBounds.height
+				&& playerBounds.top + playerBounds.height > wallBounds.top)
+			{
+				player.setVelocity({ 0.f,player.getVelocity().y });
+				player.setPosition(sf::Vector2f(wallBounds.left + wallBounds.width, playerBounds.top));
+			}
+		}
+
+	}
 }
 
 void addBlock(std::vector<Block>& allBlocks, Block block) {

@@ -36,6 +36,10 @@ void Room::roomDraw(sf::RenderWindow& window) {
 	}
 }
 
+std::vector<sf::Sprite>& Room::getAllWalls() {
+	return this->allWalls;
+}
+
 void Room::setWalls(sf::Texture& texture) {
 	int x = texture.getSize().x;
 	int y = texture.getSize().y;
