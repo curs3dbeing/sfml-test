@@ -39,11 +39,13 @@ void addBlock(std::vector<Block>&, Block);
 void Shoot(Character& player, float& dt, sf::Texture& bullet_txt);
 //Bullet stuff
 bool canShoot = true;
-const float shootCd = 0.15f;
+const float shootCd = 0.2f;
 float lastShoot = 0.f;
-sf::Vector2f mousePos;
-const float bullet_vel = 700;
-
+const float bullet_vel = 800;
+//delete later
+sf::Vector2i mousePos;
+Text mouseText;
+Font mainFont;
 
 void Movement(Character& player, RectangleShape& vision_box, float& dt);
 void WallCollision(Character& player, Room& mainroom);
@@ -54,6 +56,12 @@ int main()
 	std::map<std::string, sf::Texture> res = loadTextureFolder("imagez/bullets");
 	fog_of_war.setFillColor(sf::Color::Black);
 	levelFloor.move(sf::Vector2f(2500.f,2500.f));
+
+	//init font
+	if (!mainFont.loadFromFile("C:\\Windows\\Fonts\\arial.ttf")) {
+		throw std::runtime_error("error with font loading");
+	}
+	mouseText.setFont(mainFont);
 
 	/*blocks.push_back(Block(static_cast<block_types>(0), "imagez/floor1.png", true, true));
 	blocks.push_back(Block(static_cast<block_types>(1), "imagez/wall1.png", true, false));
@@ -123,7 +131,7 @@ int main()
 	sf::Clock dt_clock;
 
 	Character player;
-	player.setSpeed(700.f);
+	player.setSpeed(400.f);
 
 	std::string path = "imagez/hero.png";
 	std::string bullet_img = "imagez/bullets/bullet1.png";
@@ -149,21 +157,20 @@ int main()
 	while (window.isOpen()) {
 
 		dt = dt_clock.restart().asSeconds();
-		mousePos = sf::Vector2f(sf::Mouse::getPosition());
 
 		while (window.pollEvent(ev)) {
 
 			switch (ev.type) {
-			case Event::KeyPressed:
-			{
-				if (ev.key.code==Keyboard::Escape) {
-					window.close();
+				case Event::KeyPressed:
+				{
+					if (ev.key.code==Keyboard::Escape) {
+						window.close();
+					}
+					break;
 				}
-				break;
-			}
-			case Event::Closed:
-				window.close();
-				break;
+				case Event::Closed:
+					window.close();
+					break;
 			}
 		}
 
@@ -176,12 +183,19 @@ int main()
 		window.draw(vision_box);
 		//window.draw(fog_of_war);
 		window.draw(player.getVisionCircle());
-		window.draw(player.getSprite());
 
 		Movement(player, vision_box, dt);
 		WallCollision(player,mainroom);
 		player.getSprite().move(player.getVelocity());
+		window.draw(player.getSprite());
+		mousePos = sf::Vector2i(window.mapPixelToCoords(sf::Mouse::getPosition()));
 		Shoot(player, dt, bullet);
+
+		mouseText.setString(std::to_string(mousePos.x) + " : " + std::to_string(mousePos.y));
+		mouseText.setCharacterSize(24);
+		mouseText.setPosition(Camera.getCenter().x - Camera.getSize().x / 2, Camera.getCenter().y - Camera.getSize().y / 2);
+
+		window.draw(mouseText);
 
 		if (player.getPosition().x <= vision_box.getGlobalBounds().getPosition().x) { //left wall
 			if (player.getPosition().y > vision_box.getGlobalBounds().getPosition().y || player.getPosition().y + player.getSprite().getGlobalBounds().height < vision_box.getGlobalBounds().height + vision_box.getPosition().y) {
@@ -222,7 +236,7 @@ void Shoot(Character& player, float& dt, sf::Texture& bullet_txt) {
 		sf::FloatRect bounds = player.getSprite().getGlobalBounds();
 		sf::Vector2f pos(bounds.left + bounds.width / 2 - bounds.width / 6, bounds.top + bounds.height / 2 - bounds.height / 6);
 
-		sf::Vector2f direction = mousePos - player.getCenteredPosition();
+		sf::Vector2f direction = sf::Vector2f(mousePos) - player.getCenteredPosition();
 		bool fix_angle = direction.y > 0;
 		sf::Vector2f baseLine = sf::Vector2f(-1, 0);
 		float length = std::sqrt(direction.x * direction.x + direction.y * direction.y);
@@ -284,9 +298,7 @@ void Movement(Character& player, RectangleShape& vision_box, float& dt) {
 
 	velocity *= player.getSpeed() * dt;
 	player.addVelocity(velocity);
-
-	//player.getSprite().move(player.getVelocity()); //-> came into main.cpp after collision check function
-
+	//player.getSprite().move(player.getVelocity()); //-> came into main() after collision check function
 }
 
 
