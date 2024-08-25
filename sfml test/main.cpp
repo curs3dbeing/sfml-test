@@ -34,7 +34,8 @@ sf::RectangleShape fog_of_war(window_size); // fog_of_war
 sf::RectangleShape levelFloor(sf::Vector2f(-5000.f, -5000.f)); // floor
 
 void addBlock(std::vector<Block>&, Block); 
-
+void fileWrite(std::list<Block>);
+void fileRead(std::list<Block>&);
 
 void Shoot(Character& player, float& dt, sf::Texture& bullet_txt);
 //Bullet stuff
@@ -63,52 +64,17 @@ int main()
 	}
 	mouseText.setFont(mainFont);
 
-	/*blocks.push_back(Block(static_cast<block_types>(0), "imagez/floor1.png", true, true));
-	blocks.push_back(Block(static_cast<block_types>(1), "imagez/wall1.png", true, false));
-
-	for (auto block : blocks) {
-		Block::allBlocks.insert(std::make_pair(block.getBlockName(), block));
-	}
+	/*************************
 	
-	std::ofstream blockFile("data//data.bin", std::ios::binary & std::ios::app);
-	try {
-		if (blockFile.is_open()) {
-			for (auto block : blocks) {
-				block.serialize(blockFile);
-			}
-		}
-	}
-	catch (std::ios_base::failure) {
-		std::cerr << "error occured while serializing a blocks file";
-		exit(-1);
-	}*/
+			blocks.push_back(Block(static_cast<block_types>(0), "imagez/floor1.png", true, true));
+			blocks.push_back(Block(static_cast<block_types>(1), "imagez/wall1.png", true, false));
+
+	*************************/
 
 	//blocks.clear();
 	// BLOCK FILE READ ( I HONESTLY DONT LIKE THIS PART (REWORK REQUIRED) ) 
 
-	std::ifstream blocksFile("data//data.bin", std::ios::binary); 
-	try {
-		blocks.push_back(Block());
-		std::list<Block>::iterator it = blocks.begin();
-		
-		blocksFile.seekg(0, std::ios::end);
-		std::streampos end_of_file = blocksFile.tellg();
-		blocksFile.seekg(0, std::ios::beg);
-
-		if (blocksFile.is_open()) {
-			while (blocksFile.tellg() != end_of_file) {
-				it->deserialize(blocksFile);
-				blocks.push_back(Block());
-				it++;
-			}
-			blocks.pop_back();
-		}
-
-	}
-	catch (std::ios_base::failure) {
-		std::cerr << "error occured while deserializing a blocks file";
-		exit(-1);
-	}
+	fileRead(blocks);
 
 	for (auto block : blocks) {
 		Block::allBlocks.insert(std::make_pair(block.getBlockName(),block));
@@ -225,6 +191,8 @@ int main()
 	}
 }
 
+
+
 void Shoot(Character& player, float& dt, sf::Texture& bullet_txt) {
 	if (Keyboard::isKeyPressed(Keyboard::Space) && canShoot) {
 
@@ -300,7 +268,52 @@ void Movement(Character& player, RectangleShape& vision_box, float& dt) {
 	//player.getSprite().move(player.getVelocity()); //-> came into main() after collision check function
 }
 
+void fileWrite(std::list<Block> blocks) {
 
+	for (auto block : blocks) {
+		Block::allBlocks.insert(std::make_pair(block.getBlockName(), block));
+	}
+
+	std::ofstream blockFile("data//data.bin", std::ios::binary & std::ios::app);
+	try {
+		if (blockFile.is_open()) {
+			for (auto block : blocks) {
+				block.serialize(blockFile);
+			}
+		}
+	}
+	catch (std::ios_base::failure) {
+		std::cerr << "error occured while serializing a blocks file";
+		exit(-1);
+	}
+}
+void fileRead(std::list<Block>& blocks) {
+
+	std::ifstream blocksFile("data//data.bin", std::ios::binary);
+
+	try {
+		blocks.push_back(Block());
+		std::list<Block>::iterator it = blocks.begin();
+
+		blocksFile.seekg(0, std::ios::end);
+		std::streampos end_of_file = blocksFile.tellg();
+		blocksFile.seekg(0, std::ios::beg);
+
+		if (blocksFile.is_open()) {
+			while (blocksFile.tellg() != end_of_file) {
+				it->deserialize(blocksFile);
+				blocks.push_back(Block());
+				it++;
+			}
+			blocks.pop_back();
+		}
+
+	}
+	catch (std::ios_base::failure) {
+		std::cerr << "error occured while deserializing a blocks file";
+		exit(-1);
+	}
+}
 void WallCollision(Character& player, Room& mainroom) {
 	for (auto& wall : mainroom.getAllWalls()) {
 
