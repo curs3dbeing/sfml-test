@@ -68,11 +68,9 @@ int main()
 	
 			blocks.push_back(Block(static_cast<block_types>(0), "imagez/floor1.png", true, true));
 			blocks.push_back(Block(static_cast<block_types>(1), "imagez/wall1.png", true, false));
+			fileWrite(blocks);
 
 	*************************/
-
-	//blocks.clear();
-	// BLOCK FILE READ ( I HONESTLY DONT LIKE THIS PART (REWORK REQUIRED) ) 
 
 	fileRead(blocks);
 
@@ -88,7 +86,9 @@ int main()
 	//room
 	int y_size = 1080 / 64;
 	int x_size = 1920 / 64;
+
 	Room mainroom(y_size,x_size-1,sf::Vector2f(0.f,0.f));
+
 	mainroom.setFloor(Block::allBlocks[block_types::floor1].getTexture());
 	mainroom.setWalls(Block::allBlocks[block_types::wall1].getTexture());
 
@@ -97,7 +97,7 @@ int main()
 	sf::Clock dt_clock;
 
 	Character player;
-	player.setSpeed(400.f);
+	player.setSpeed(STARTING_SPEED);
 
 	std::string path = "imagez/hero.png";
 	std::string bullet_img = "imagez/bullets/bullet1.png";
@@ -108,17 +108,13 @@ int main()
 
 	player.setTexture(path);
 	player.setSprite();
-	player.getSprite().move(window_size.x / 2 - player.getTexture().getSize().x/2, window_size.y / 2 - player.getTexture().getSize().y/2);
+	player.getSprite().move(window_size.x / 2 - player.getTexture().getSize().x/2, window_size.y / 2 - player.getTexture().getSize().y/2); //move player to center
 
-	RectangleShape vision_box(Vector2f(700.f, 400.f)); // vision box - box for camera movement 
-	// vision box atributes for modeling the camera movement and etc.
+	RectangleShape vision_box(Vector2f(700.f, 400.f));
 	vision_box.setFillColor(Color::Transparent);
-	/*vision_box.setOutlineThickness(10.f);
-	vision_box.setOutlineColor(sf::Color::White);*/
-
-	window.setFramerateLimit(300); //FPS border(just in case)
-
 	vision_box.move(window_size.x / 2 - vision_box.getSize().x/2, window_size.y / 2 - vision_box.getSize().y / 2);
+
+	window.setFramerateLimit(300);
 	Event ev;
 	while (window.isOpen()) {
 

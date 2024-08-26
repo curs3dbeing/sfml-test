@@ -12,7 +12,7 @@ Character::Character() {
 	visionCircle.setRadius(300.f);
 }
 
-Character::Character(float _HP, std::string _Name, std::string img_path, float speed) : Entity(_HP, _Name, img_path) {
+Character::Character(float _HP, std::string img_path, float speed) : Entity(_HP, img_path) {
 	this->speed = speed;
 }
 

@@ -11,7 +11,7 @@ class Character : public Entity
 public:
 
 	Character();
-	Character(float _HP, std::string _Name, std::string img_path, float speed);
+	Character(float _HP, std::string img_path, float speed);
 
 	void				setSpeed(float _speed);
 	float				getSpeed();
@@ -36,8 +36,8 @@ public:
 
 
 private:
-	float speed;
-	sf::CircleShape visionCircle;
+	float				speed;
+	sf::CircleShape		visionCircle;
 };
 
 #endif

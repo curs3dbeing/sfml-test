@@ -24,11 +24,6 @@ Room::~Room() {
 
 
 void Room::roomDraw(sf::RenderWindow& window) {
-	/*for (int i = 0; i < y_size; i++) {
-		for (int j = 0; j < x_size; j++) {
-			window.draw(room_size[i][j].getSprite());
-		}
-	}*/
 	int walls = allWalls.size();
 	for (int i = 0; i < walls; i++) {
 		allWalls[i].setScale(walls_scale);

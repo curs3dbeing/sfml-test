@@ -4,20 +4,26 @@
 #include "SFML/Graphics.hpp"
 #include "Weapon.h"
 
+const float STARTING_SPEED = 350.f;
+
 class Entity
 {
 protected:
+
 	float HP;
+
 	sf::Vector2f velocity = sf::Vector2f(0.f,0.f);
-	std::string Name;
+
 	Weapon weapon;
+
 	sf::Sprite sprite;
 	sf::Texture texture;
 	std::string img_path;
+
 public:
 
 	Entity();
-	Entity(float _HP, std::string _Name, std::string img_path);
+	Entity(float _HP, std::string img_path);
 
 
 	virtual void			setVelocity(sf::Vector2f);
@@ -26,8 +32,6 @@ public:
 	virtual void			addVelocity(sf::Vector2f);
 
 	virtual float&			getHP();
-
-	virtual std::string		getName();
 
 	virtual void			setWeapon(Weapon _weapon);
 	virtual Weapon			getWeapon();

@@ -3,10 +3,9 @@
 
 Entity::Entity() {
 	this->HP = 0;
-	this->Name = "";
 }
 
-Entity::Entity(float _HP, std::string _Name, std::string img_path) : HP(_HP), Name(_Name), img_path(img_path) {
+Entity::Entity(float _HP, std::string img_path) : HP(_HP), img_path(img_path) {
 
 	this->texture.loadFromFile(img_path);
 	this->sprite.setTexture(this->texture);
@@ -30,10 +29,6 @@ void Entity::setVelocity(sf::Vector2f velocity) {
 
 sf::Vector2f& Entity::getVelocity() {
 	return this->velocity;
-}
-
-std::string Entity::getName() {
-	return this->Name;
 }
 
 void Entity::setWeapon(Weapon _weapon) {

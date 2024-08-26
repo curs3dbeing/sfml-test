@@ -25,25 +25,38 @@ protected:
 	bool passable;
 
 public:
-	static std::map<block_types,Block> allBlocks;
+
+	static std::map<block_types,Block> allBlocks; //hash-table for all blocks
+
 
 	Block();
 	Block(std::string,bool,bool);
 	Block(block_types, std::string, bool, bool);
-	void setTextureReapeted(bool repeat);
-	sf::Sprite& getSprite();
-	std::string getImgPath();
-	void setTexture(sf::Texture&);
-	sf::Texture& getTexture();
-	void setVisible(bool);
-	void setPassable(bool);
-	void setTextureSmooth(bool);
-	void setPosition(sf::Vector2f pos);
-	virtual bool isVisible();
-	virtual bool isPassable();
-	block_types& getBlockName();
-	void serialize(std::ostream& os) const;
-	void deserialize(std::istream& is);
+
+
+	void				setTextureReapeted(bool repeat); // sets floor texture repeated
+
+	sf::Sprite&			getSprite();
+
+	std::string			getImgPath();
+
+	void				setTexture(sf::Texture&);
+	sf::Texture&		getTexture();
+
+	void				setVisible(bool);
+	void				setPassable(bool);
+
+	void				setTextureSmooth(bool);
+
+	void				setPosition(sf::Vector2f pos);
+
+	virtual bool		isVisible();
+	virtual bool		isPassable();
+
+	block_types&		getBlockName();
+
+	void				serialize(std::ostream& os) const;
+	void				deserialize(std::istream& is);
 };
 
 #endif

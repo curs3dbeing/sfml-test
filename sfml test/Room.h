@@ -19,7 +19,7 @@ private:
 	
 public:
 
-	Room(int n, int k, sf::Vector2f room_pos);
+	Room(int n, int k, sf::Vector2f room_pos /*room position*/);
 	~Room();
 
 	void						roomDraw(sf::RenderWindow& window);
