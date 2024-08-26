@@ -1,17 +1,19 @@
-#pragma once
+#ifndef RANDOMIZER_H
+#define RANDOMIZER_H
 
-#include <iostream>
 #include <random>
 
 
 class Randomizer
 {
 private:
-	std::random_device device;
-	std::mt19937 generator;
+	std::random_device	device;
+	std::mt19937		generator;
 public:
-	explicit Randomizer();
-
+	explicit			Randomizer();
 	template<typename T>
-	T& random_value_generator(T low_num, T high_num);
+	T					random_value_generator(T low_num, T high_num);
 };
+
+
+#endif RANDOMIZER_H

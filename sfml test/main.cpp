@@ -12,8 +12,10 @@
 #include <list>
 #include <map>
 #include <cmath>
+#include <random>
 #include "Block.h"
 #include "utils.h"
+#include "Randomizer.h"
 #include <stdlib.h>
 
 using namespace sf;
@@ -57,6 +59,10 @@ int main()
 	std::map<std::string, sf::Texture> res = loadTextureFolder("imagez/bullets");
 	fog_of_war.setFillColor(sf::Color::Black);
 	levelFloor.move(sf::Vector2f(2500.f,2500.f));
+	Randomizer generate;
+	int n = 15;
+	int fh = 2954;
+	std::cout << generate.random_value_generator(n, fh);
 
 	//init font
 	if (!mainFont.loadFromFile("C:\\Windows\\Fonts\\arial.ttf")) {
